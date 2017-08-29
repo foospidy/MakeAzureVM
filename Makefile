@@ -1,8 +1,9 @@
-RESOURCE_GROUP?=myresourcegroup
+PREFIX?=foo
+RESOURCE_GROUP?=resourcegroup
 LOCATION?=eastus
-STORAGE?=mydefaultstorage
-VM?=mydefaultVM
-DISK?=mydefaultDISK
+STORAGE?=storage
+VM?=vm
+DISK?=disk
 IMAGE_SIZE?=2
 RELEASE=jessie
 
@@ -21,37 +22,37 @@ login:
 	az login
 
 create-resource-group:
-	az group create --name $(RESOURCE_GROUP) --location $(LOCATION)
+	az group create --name $(PREFIX)$(RESOURCE_GROUP) --location $(LOCATION)
 
 create-storage-account:
-	az storage account create --resource-group $(RESOURCE_GROUP) --location $(LOCATION) --name $(STORAGE) --kind Storage --sku Standard_LRS
+	az storage account create --resource-group $(PREFIX)$(RESOURCE_GROUP) --location $(LOCATION) --name $(PREFIX)$(STORAGE) --kind Storage --sku Standard_LRS
 
 create-vm:
-	az vm create --resource-group $(RESOURCE_GROUP) --name $(VM) --image Debian --generate-ssh-keys
+	az vm create --resource-group $(PREFIX)$(RESOURCE_GROUP) --name $(PREFIX)$(VM) --image Debian --generate-ssh-keys
 
 create-storage-container:
-	az storage container create --account-name $(STORAGE) --name $(DISK)
+	az storage container create --account-name $(PREFIX)$(STORAGE) --name $(DISK)
 
 create-disk:
-	az disk create --resource-group $(RESOURCE_GROUP) --name $(DISK) --source https://mystorageaccount.blob.core.windows.net/mydisks/myDisk.vhd
+	az disk create --resource-group $(PREFIX)$(RESOURCE_GROUP) --name $(PREFIX)$(DISK) --source https://mystorageaccount.blob.core.windows.net/mydisks/myDisk.vhd
 
 upload-vhd:
-	az storage blob upload --account-name $(STORAGE) --container-name $(DISK) --type page --file $$(ls build/azure-manage/*.vhd) --name $(DISK).vhd
+	az storage blob upload --account-name $(PREFIX)$(STORAGE) --container-name $(DISK) --type page --file $$(ls build/azure-manage/*.vhd) --name $(DISK).vhd
 
 list-groups:
 	az group list
 
 list-resources:
-	az resource list --location $(LOCATION) --resource-group $(RESOURCE_GROUP)
+	az resource list --location $(LOCATION) --resource-group $(PREFIX)$(RESOURCE_GROUP)
 
 list-keys:
-	az storage account keys list --resource-group $(RESOURCE_GROUP) --account-name $(STORAGE)
+	az storage account keys list --resource-group $(PREFIX)$(RESOURCE_GROUP) --account-name $(PREFIX)$(STORAGE)
 
 list-disks:
-	az disk list --resource-group $(RESOURCE_GROUP) --query '[].{Name:name,URI:creationData.sourceUri}' --output table
+	az disk list --resource-group $(PREFIX)$(RESOURCE_GROUP) --query '[].{Name:name,URI:creationData.sourceUri}' --output table
 
 delete-resource-group:
-	az group delete --name $(RESOURCE_GROUP)
+	az group delete --name $(PREFIX)$(RESOURCE_GROUP)
 
 clean:
 	rm -rf build
