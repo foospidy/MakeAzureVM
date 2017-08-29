@@ -34,9 +34,12 @@ create-storage-container:
 create-disk:
 	az disk create --resource-group $(PREFIX)$(RESOURCE_GROUP) --name $(PREFIX)managed$(DISK) --source https://$(PREFIX)$(STORAGE).blob.core.windows.net/$(PREFIX)$(DISK)/$(PREFIX)$(DISK).vhd
 
-create-vm:
+create-vm-azure-image:
+	az vm create --resource-group $(PREFIX)$(RESOURCE_GROUP) --name $(PREFIX)$(VM) --image UbuntuLTS --generate-ssh-keys
 	#az vm create --resource-group $(PREFIX)$(RESOURCE_GROUP) --name $(PREFIX)$(VM) --image Debian --generate-ssh-keys
-	az vm create --resource-group $(PREFIX)$(RESOURCE_GROUP) --name $(PREFIX)$(VM) --image $(PREFIX)managed$(DISK) --generate-ssh-keys
+
+create-vm-managed-image:
+	az vm create --resource-group $(PREFIX)$(RESOURCE_GROUP) --name $(PREFIX)$(VM) --attach-os-disk $(PREFIX)managed$(DISK) --os-type linux
 
 upload-vhd:
 	az storage blob upload --account-key $(KEY) --account-name $(PREFIX)$(STORAGE) --container-name $(PREFIX)$(DISK) --type page --file $$(ls build/azure-manage/*.vhd) --name $(PREFIX)$(DISK).vhd

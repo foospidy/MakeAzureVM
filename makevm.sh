@@ -21,3 +21,5 @@ read key
 make upload-vhd PREFIX=$1 KEY=$key
 
 make create-disk PREFIX=$1
+
+make create-vm-managed-image PREFIX=$1
