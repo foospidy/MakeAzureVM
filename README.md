@@ -7,4 +7,5 @@ Make a Debian based Azure VM!
 
 # Instructions
 
-tbd
+1. make build-setup
+2. make build-image  [IMAGE_SIZE=n] [RELEASE=jessie]

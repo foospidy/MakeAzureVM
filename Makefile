@@ -1,8 +1,8 @@
-RESOURCE_GROUP?=default-resourcegroup
+RESOURCE_GROUP?=myresourcegroup
 LOCATION?=eastus
-STORAGE?=defaultstorage
-VM?=defaultVM
-DISK?=defaultDISK
+STORAGE?=mydefaultstorage
+VM?=mydefaultVM
+DISK?=mydefaultDISK
 IMAGE_SIZE?=2
 RELEASE=jessie
 
@@ -15,6 +15,7 @@ build-setup:
 
 build-image:
 	cd build/azure-manage && sudo azure_build_image --option release=$(RELEASE) --option image_size_gb=$(IMAGE_SIZE) --option image_prefix=debian-$(RELEASE)-azure $(RELEASE)
+	sudo chown -R $$(whoami):$$(whoami) build/
 
 login:
 	az login
@@ -22,14 +23,26 @@ login:
 create-resource-group:
 	az group create --name $(RESOURCE_GROUP) --location $(LOCATION)
 
-create-storage:
+create-storage-account:
 	az storage account create --resource-group $(RESOURCE_GROUP) --location $(LOCATION) --name $(STORAGE) --kind Storage --sku Standard_LRS
 
 create-vm:
 	az vm create --resource-group $(RESOURCE_GROUP) --name $(VM) --image Debian --generate-ssh-keys
 
+create-storage-container:
+	az storage container create --account-name $(STORAGE) --name $(DISK)
+
 create-disk:
-	az disk create --resource-group $(RESOURCE_GROUP) --name $(DISK)  --source https://mystorageaccount.blob.core.windows.net/mydisks/myDisk.vhd
+	az disk create --resource-group $(RESOURCE_GROUP) --name $(DISK) --source https://mystorageaccount.blob.core.windows.net/mydisks/myDisk.vhd
+
+upload-vhd:
+	az storage blob upload --account-name $(STORAGE) --container-name $(DISK) --type page --file $$(ls build/azure-manage/*.vhd) --name $(DISK).vhd
+
+list-groups:
+	az group list
+
+list-resources:
+	az resource list --location $(LOCATION) --resource-group $(RESOURCE_GROUP)
 
 list-keys:
 	az storage account keys list --resource-group $(RESOURCE_GROUP) --account-name $(STORAGE)
