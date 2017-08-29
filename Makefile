@@ -1,8 +1,14 @@
 RESOURCE_GROUP?=default-resourcegroup
 LOCATION?=eastus
 STORAGE?=defaultstorage
+VM?=defaultVM
+DISK?=defaultDISK
 
 .PHONY: create-resource-group create-storage create-vm
+
+build-setup:
+	mkdir -p build
+	cd build && git clone https://github.com/credativ/azure-manage
 
 login:
 	az login
@@ -14,10 +20,10 @@ create-storage:
 	az storage account create --resource-group $(RESOURCE_GROUP) --location $(LOCATION) --name $(STORAGE) --kind Storage --sku Standard_LRS
 
 create-vm:
-	az vm create --resource-group $(RESOURCE_GROUP) --name defaultVM --image Debian --generate-ssh-keys
+	az vm create --resource-group $(RESOURCE_GROUP) --name $(VM) --image Debian --generate-ssh-keys
 
 create-disk:
-	az disk create --resource-group $(RESOURCE_GROUP) --name defaultDISK  --source https://mystorageaccount.blob.core.windows.net/mydisks/myDisk.vhd
+	az disk create --resource-group $(RESOURCE_GROUP) --name $(DISK)  --source https://mystorageaccount.blob.core.windows.net/mydisks/myDisk.vhd
 
 list-keys:
 	az storage account keys list --resource-group $(RESOURCE_GROUP) --account-name $(STORAGE)
@@ -27,3 +33,6 @@ list-disks:
 
 delete-resource-group:
 	az group delete --name $(RESOURCE_GROUP)
+
+clean:
+	rm -rf build
