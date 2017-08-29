@@ -3,12 +3,18 @@ LOCATION?=eastus
 STORAGE?=defaultstorage
 VM?=defaultVM
 DISK?=defaultDISK
+IMAGE_SIZE?=2
+RELEASE=jessie
 
 .PHONY: create-resource-group create-storage create-vm
 
 build-setup:
 	mkdir -p build
 	cd build && git clone https://github.com/credativ/azure-manage
+	cd build/azure-manage && cp config.yml.example config.yml
+
+build-image:
+	cd build/azure-manage && sudo azure_build_image --option release=$(RELEASE) --option image_size_gb=$(IMAGE_SIZE) --option image_prefix=debian-$(RELEASE)-azure $(RELEASE)
 
 login:
 	az login
