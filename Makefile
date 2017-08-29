@@ -5,7 +5,8 @@ STORAGE?=storage
 VM?=vm
 DISK?=disk
 IMAGE_SIZE?=2
-RELEASE=jessie
+RELEASE?=jessie
+KEY?=setme
 
 .PHONY: create-resource-group create-storage create-vm
 
@@ -27,17 +28,18 @@ create-resource-group:
 create-storage-account:
 	az storage account create --resource-group $(PREFIX)$(RESOURCE_GROUP) --location $(LOCATION) --name $(PREFIX)$(STORAGE) --kind Storage --sku Standard_LRS
 
-create-vm:
-	az vm create --resource-group $(PREFIX)$(RESOURCE_GROUP) --name $(PREFIX)$(VM) --image Debian --generate-ssh-keys
-
 create-storage-container:
-	az storage container create --account-name $(PREFIX)$(STORAGE) --name $(DISK)
+	az storage container create --account-name $(PREFIX)$(STORAGE) --name $(PREFIX)$(DISK)
 
 create-disk:
-	az disk create --resource-group $(PREFIX)$(RESOURCE_GROUP) --name $(PREFIX)$(DISK) --source https://mystorageaccount.blob.core.windows.net/mydisks/myDisk.vhd
+	az disk create --resource-group $(PREFIX)$(RESOURCE_GROUP) --name $(PREFIX)managed$(DISK) --source https://$(PREFIX)$(STORAGE).blob.core.windows.net/$(PREFIX)$(DISK)/$(PREFIX)$(DISK).vhd
+
+create-vm:
+	#az vm create --resource-group $(PREFIX)$(RESOURCE_GROUP) --name $(PREFIX)$(VM) --image Debian --generate-ssh-keys
+	az vm create --resource-group $(PREFIX)$(RESOURCE_GROUP) --name $(PREFIX)$(VM) --image $(PREFIX)managed$(DISK) --generate-ssh-keys
 
 upload-vhd:
-	az storage blob upload --account-name $(PREFIX)$(STORAGE) --container-name $(DISK) --type page --file $$(ls build/azure-manage/*.vhd) --name $(DISK).vhd
+	az storage blob upload --account-key $(KEY) --account-name $(PREFIX)$(STORAGE) --container-name $(PREFIX)$(DISK) --type page --file $$(ls build/azure-manage/*.vhd) --name $(PREFIX)$(DISK).vhd
 
 list-groups:
 	az group list
