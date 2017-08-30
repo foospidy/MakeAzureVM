@@ -73,8 +73,7 @@ create-virtual-nic:
     --vnet-name $(PREFIX)vnet \
     --subnet $(PREFIX)subnet \
     --public-ip-address $(PREFIX)publicip \
-    --network-security-group $(NETWORK_SECURITY_GROUP) \
-	--api-version 2016-12-01
+    --network-security-group $(NETWORK_SECURITY_GROUP)
 
 create-availability-set:
 	az vm availability-set create \
