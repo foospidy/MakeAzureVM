@@ -16,7 +16,7 @@ build-setup:
 	cd build/azure-manage && cp config.yml.example config.yml
 
 build-image:
-	cd build/azure-manage && sudo azure_build_image --option release=$(RELEASE) --option image_size_gb=$(IMAGE_SIZE) --option image_prefix=debian-$(RELEASE)-azure $(RELEASE)
+	cd build/azure-manage && sudo azure_build_image --option release=$(RELEASE) --option image_size_gb=$(IMAGE_SIZE) --option image_prefix=debian-$(RELEASE)-azure --option login=sigsci $(RELEASE)
 	sudo chown -R $$(whoami):$$(whoami) build/
 
 login:
