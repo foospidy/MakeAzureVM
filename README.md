@@ -9,3 +9,7 @@ Make a Debian based Azure VM!
 
 1. make build-setup
 2. make build-image  [IMAGE_SIZE=n] [RELEASE=jessie]
+
+# References
+
+- https://github.com/MicrosoftDocs/azure-docs/blob/master/articles/virtual-machines/linux/upload-vhd.md
