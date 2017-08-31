@@ -1,4 +1,5 @@
 PREFIX?=foo
+NEW_PREFIX?=bar
 
 # Compute Resources
 RESOURCE_GROUP?=$(PREFIX)rg
@@ -96,6 +97,20 @@ create-vm-azure-image:
 create-vm-managed-image:
 	az vm create --resource-group $(RESOURCE_GROUP) --name $(VIRTUAL_MACHINE) --attach-os-disk $(MANAGED_DISK) --os-type linux
 
+create-vm-generalized-image:
+	az vm create \
+		--resource-group $(RESOURCE_GROUP) \
+		--name $(NEW_PREFIX)vm \
+		--image $(PREFIX)image \
+		--admin-username azure \
+		--generate-ssh-keys
+
+create-generalized-image:
+	az image create \
+		--resource-group $(RESOURCE_GROUP) \
+		--name $(PREFIX)image \
+		--source $(VIRTUAL_MACHINE)
+
 upload-vhd:
 	az storage blob upload --account-key $(KEY) --account-name $(STORAGE_ACCOUNT) --container-name $(STORAGE_CONTAINER) --type page --file $$(ls build/azure-manage/*.vhd) --name $(STORAGE_CONTAINER).vhd
 
@@ -120,6 +135,12 @@ reset-ssh-key:
 
 generate-ssh-keys:
 	ssh-keygen -t rsa -b 4096 -C "azure@$(VIRTUAL_MACHINE)" -f ~/.ssh/azure_id_rsa
+
+deallocate-vm:
+	az vm deallocate --resource-group $(RESOURCE_GROUP) --name $(VIRTUAL_MACHINE)
+
+generalize-vm:
+	az vm generalize --resource-group $(RESOURCE_GROUP) --name $(VIRTUAL_MACHINE)
 
 delete-resource-group:
 	az group delete --name $(RESOURCE_GROUP)

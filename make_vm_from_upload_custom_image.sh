@@ -2,7 +2,7 @@
 
 if [ -z $1 ];
 then
-    echo 'Usage: ./makevm.sh <prefix>'
+    echo 'Usage: ./make_vm_from_upload_custom_image.sh <prefix>'
     exit
 fi
 
