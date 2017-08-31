@@ -111,6 +111,16 @@ list-keys:
 list-disks:
 	az disk list --resource-group $(RESOURCE_GROUP) --query '[].{Name:name,URI:creationData.sourceUri}' --output table
 
+# https://docs.microsoft.com/en-us/azure/virtual-machines/linux/troubleshoot-ssh-connection#use-the-azure-cli-20
+reset-ssh:
+	az vm user reset-ssh --resource-group $(RESOURCE_GROUP) --name $(VIRTUAL_MACHINE)
+
+reset-ssh-key:
+	az vm user update --resource-group $(RESOURCE_GROUP) --name $(VIRTUAL_MACHINE) --username azure --ssh-key-value ~/.ssh/azure_id_rsa.pub
+
+generate-ssh-keys:
+	ssh-keygen -t rsa -b 4096 -C "azure@$(VIRTUAL_MACHINE)" -f ~/.ssh/azure_id_rsa
+
 delete-resource-group:
 	az group delete --name $(RESOURCE_GROUP)
 

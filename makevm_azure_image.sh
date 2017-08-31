@@ -27,5 +27,12 @@ make create-availability-set PREFIX=$1
 
 make create-vm-azure-image PREFIX=$1
 
-echo 'Done!'
-echo 'You can now ssh using: ssh azure@$1.eastus.cloudapp.azure.com'
+if [ ! -f ~/.ssh/azure_id_rsa ];
+then
+    make generate-ssh-keys PREFIX=$1
+fi
+
+make reset-ssh-key PREFIX=$1
+
+echo "Done!"
+echo "You can now ssh using: ssh -i ~/.ssh/azure_id_rsa azure@${1}.eastus.cloudapp.azure.com"
