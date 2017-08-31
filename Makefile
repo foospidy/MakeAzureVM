@@ -82,17 +82,16 @@ create-availability-set:
     	--name $(PREFIX)as
 
 create-vm-azure-image:
-	#az vm create --resource-group $(RESOURCE_GROUP) --name $(VIRTUAL_MACHINE) --image UbuntuLTS --generate-ssh-keys
-	#az vm create --resource-group $(RESOURCE_GROUP) --name $(VIRTUAL_MACHINE) --image Debian --generate-ssh-keys
 	az vm create \
-    	--resource-group $(RESOURCE_GROUP) \
-    	--name $(VIRTUAL_MACHINE) \
-   		--location $(LOCATION) \
-   		--availability-set $(PREFIX)as \
-    	--nics $(PREFIX)nic \
-    	--image UbuntuLTS \
-    	--admin-username azure \
-    	--generate-ssh-keys
+		--resource-group $(RESOURCE_GROUP) \
+		--name $(VIRTUAL_MACHINE) \
+		--location $(LOCATION) \
+		--availability-set $(PREFIX)as \
+		--nics $(PREFIX)nic \
+		--image UbuntuLTS \
+		--admin-username azure \
+		--generate-ssh-keys \
+		--custom-data cloud-init.txt
 
 create-vm-managed-image:
 	az vm create --resource-group $(RESOURCE_GROUP) --name $(VIRTUAL_MACHINE) --attach-os-disk $(MANAGED_DISK) --os-type linux
@@ -144,6 +143,12 @@ generalize-vm:
 
 delete-resource-group:
 	az group delete --name $(RESOURCE_GROUP)
+
+delete-vm:
+	az vm delete --resource-group $(RESOURCE_GROUP) --name $(VIRTUAL_MACHINE)
+
+redeploy-vm:
+	az vm redeploy --resource-group $(RESOURCE_GROUP) --name $(VIRTUAL_MACHINE)
 
 clean:
 	rm -rf build

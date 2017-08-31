@@ -1,0 +1,10 @@
+#cloud-config
+
+# https://docs.microsoft.com/en-us/azure/virtual-machines/linux/tutorial-automate-vm-deployment
+
+package_upgrade: true
+packages:
+  - nginx
+  - nginx-extras
+runcmd:
+  - service nginx restart
