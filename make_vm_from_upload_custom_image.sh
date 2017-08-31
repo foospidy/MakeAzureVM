@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# https://github.com/MicrosoftDocs/azure-docs/blob/master/articles/virtual-machines/linux/upload-vhd.md
 
 if [ -z $1 ];
 then
