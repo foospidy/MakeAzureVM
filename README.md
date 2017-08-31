@@ -21,10 +21,14 @@ Work in progress, do not use.
 
 # References
 
+## VM Setup
 - https://github.com/MicrosoftDocs/azure-docs/blob/master/articles/virtual-machines/linux/upload-vhd.md
 - https://docs.microsoft.com/en-us/azure/virtual-machines/linux/create-upload-ubuntu
 - https://docs.microsoft.com/en-us/azure/virtual-machines/linux/debian-create-upload-vhd
 - https://docs.microsoft.com/en-us/azure/virtual-machines/linux/tutorial-custom-images
 - https://docs.microsoft.com/en-us/azure/virtual-machines/linux/capture-image
 - https://docs.microsoft.com/en-us/azure/virtual-machines/linux/copy-vm
+
+## VM Config
+- https://docs.microsoft.com/en-us/azure/virtual-machines/linux/tutorial-automate-vm-deployment
 - https://docs.microsoft.com/en-us/azure/virtual-machines/linux/quick-create-portal#install-nginx
