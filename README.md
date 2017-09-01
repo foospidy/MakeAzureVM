@@ -10,7 +10,7 @@ Make a Linux (Ubuntu) based Azure VM!
 1. ./make_vm_from_azure_image.sh <prefix> [location]
 2. SSH into VM and install/configure (customize to your needs).
 3. ./make_image_from_vm.sh <prefix> [location]
-4. ./make_vm_from_custom_image.sh <prefix> <new prefix> [LOCATION]
+4. ./make_vm_from_custom_image.sh <prefix> <new prefix> [location]
 
 # Instructions - advanced
 
