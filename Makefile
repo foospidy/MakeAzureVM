@@ -136,7 +136,7 @@ list-keys:
 # https://docs.microsoft.com/en-us/cli/azure/disk?view=azure-cli-latest
 list-disks:
 	@#az disk list --resource-group $(RESOURCE_GROUP) --query '[].{Name:name,URI:creationData.sourceUri}' --output table
-	az disk list --resource-group $(RESOURCE_GROUP) --location $(LOCATION)
+	az disk list --resource-group $(RESOURCE_GROUP)
 
 # https://docs.microsoft.com/en-us/azure/virtual-machines/linux/troubleshoot-ssh-connection#use-the-azure-cli-20
 reset-ssh:
