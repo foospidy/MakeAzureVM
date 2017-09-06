@@ -21,6 +21,8 @@ PROTOCOL?=tcp
 IMAGE_SIZE?=2
 RELEASE?=jessie
 KEY?=setme
+DISK?=setme
+SAS?=setme
 
 .PHONY: create-resource-group create-storage create-vm
 
@@ -110,6 +112,15 @@ create-generalized-image:
 		--name $(PREFIX)image \
 		--source $(VIRTUAL_MACHINE)
 
+create-snapshot:
+	az snapshot create --resource-group $(RESOURCE_GROUP) --name $(PREFIX)ss --source $(DISK)
+
+grant-access-snapshot:
+	@az snapshot grant-access --resource-group $(RESOURCE_GROUP) --name $(PREFIX)ss --duration-in-seconds 3600 --query [accessSas] -o tsv
+
+copy-storage-blob:
+	az storage blob copy start --destination-blob $(PREFIX).vhd --account-name $(STORAGE_ACCOUNT) --destination-container $(STORAGE_CONTAINER) --account-key $(KEY) --source-uri "$(SAS)"
+
 upload-vhd:
 	az storage blob upload --account-key $(KEY) --account-name $(STORAGE_ACCOUNT) --container-name $(STORAGE_CONTAINER) --type page --file $$(ls build/azure-manage/*.vhd) --name $(STORAGE_CONTAINER).vhd
 
@@ -123,7 +134,8 @@ list-keys:
 	az storage account keys list --resource-group $(RESOURCE_GROUP) --account-name $(STORAGE_ACCOUNT)
 
 list-disks:
-	az disk list --resource-group $(RESOURCE_GROUP) --query '[].{Name:name,URI:creationData.sourceUri}' --output table
+	@#az disk list --resource-group $(RESOURCE_GROUP) --query '[].{Name:name,URI:creationData.sourceUri}' --output table
+	az disk list --resource-group $(RESOURCE_GROUP)
 
 # https://docs.microsoft.com/en-us/azure/virtual-machines/linux/troubleshoot-ssh-connection#use-the-azure-cli-20
 reset-ssh:
@@ -149,6 +161,9 @@ delete-vm:
 
 redeploy-vm:
 	az vm redeploy --resource-group $(RESOURCE_GROUP) --name $(VIRTUAL_MACHINE)
+
+stop-vm:
+	az vm stop --resource-group $(RESOURCE_GROUP) --name $(VIRTUAL_MACHINE)
 
 clean:
 	rm -rf build

@@ -32,3 +32,8 @@ Work in progress, do not use.
 ## VM Config
 - https://docs.microsoft.com/en-us/azure/virtual-machines/linux/tutorial-automate-vm-deployment
 - https://docs.microsoft.com/en-us/azure/virtual-machines/linux/quick-create-portal#install-nginx
+
+## Download VHD from VM
+
+- https://docs.microsoft.com/en-us/azure/virtual-machines/linux/download-vhd
+- https://docs.microsoft.com/en-us/azure/virtual-machines/scripts/virtual-machines-linux-cli-sample-copy-snapshot-to-storage-account
