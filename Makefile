@@ -71,12 +71,12 @@ create-network-security-group-rule:
 
 create-virtual-nic:
 	az network nic create \
-    --resource-group $(RESOURCE_GROUP) \
-    --name $(PREFIX)nic \
-    --vnet-name $(PREFIX)vnet \
-    --subnet $(PREFIX)subnet \
-    --public-ip-address $(PREFIX)publicip \
-    --network-security-group $(NETWORK_SECURITY_GROUP)
+   		--resource-group $(RESOURCE_GROUP) \
+    	--name $(PREFIX)nic \
+    	--vnet-name $(PREFIX)vnet \
+    	--subnet $(PREFIX)subnet \
+    	--public-ip-address $(PREFIX)publicip \
+    	--network-security-group $(NETWORK_SECURITY_GROUP)
 
 create-availability-set:
 	az vm availability-set create \
@@ -113,7 +113,7 @@ create-generalized-image:
 		--source $(VIRTUAL_MACHINE)
 
 create-snapshot:
-	az snapshot create --resource-group $(RESOURCE_GROUP) --name $(PREFIX)ss --source $(DISK)
+	az snapshot create --resource-group $(RESOURCE_GROUP) --location $(LOCATION) --name $(PREFIX)ss --source $(DISK)
 
 grant-access-snapshot:
 	@az snapshot grant-access --resource-group $(RESOURCE_GROUP) --name $(PREFIX)ss --duration-in-seconds 3600 --query [accessSas] -o tsv
@@ -128,14 +128,15 @@ list-groups:
 	az group list
 
 list-resources:
-	az resource list --location $(LOCATION) --resource-group $(RESOURCE_GROUP)
+	az resource list --resource-group $(RESOURCE_GROUP) --location $(LOCATION)
 
 list-keys:
 	az storage account keys list --resource-group $(RESOURCE_GROUP) --account-name $(STORAGE_ACCOUNT)
 
+# https://docs.microsoft.com/en-us/cli/azure/disk?view=azure-cli-latest
 list-disks:
 	@#az disk list --resource-group $(RESOURCE_GROUP) --query '[].{Name:name,URI:creationData.sourceUri}' --output table
-	az disk list --resource-group $(RESOURCE_GROUP)
+	az disk list --resource-group $(RESOURCE_GROUP) --location $(LOCATION)
 
 # https://docs.microsoft.com/en-us/azure/virtual-machines/linux/troubleshoot-ssh-connection#use-the-azure-cli-20
 reset-ssh:
