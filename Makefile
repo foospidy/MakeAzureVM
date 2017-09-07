@@ -37,7 +37,9 @@ login:
 	az login
 
 create-resource-group:
-	az group create --name $(RESOURCE_GROUP) --location $(LOCATION)
+	az group create \
+		--name $(RESOURCE_GROUP) \
+		--location $(LOCATION)
 
 create-storage-account:
 	az storage account create --resource-group $(RESOURCE_GROUP) \
@@ -47,21 +49,34 @@ create-storage-account:
 		--sku Standard_LRS
 
 create-storage-container:
-	az storage container create --account-name $(STORAGE_ACCOUNT) --name $(STORAGE_CONTAINER)
+	az storage container create \
+		--account-name $(STORAGE_ACCOUNT) \
+		--name $(STORAGE_CONTAINER)
 
 create-managed-disk:
-	az disk create --resource-group $(RESOURCE_GROUP) \
-	--name $(MANAGED_DISK) \
-	--source https://$(STORAGE_ACCOUNT).blob.core.windows.net/$(STORAGE_CONTAINER)/$(PREFIX).vhd
+	az disk create \
+		--resource-group $(RESOURCE_GROUP) \
+		--name $(MANAGED_DISK) \
+		--source https://$(STORAGE_ACCOUNT).blob.core.windows.net/$(STORAGE_CONTAINER)/$(PREFIX).vhd
 
 create-virtual-network:
-	az network vnet create --resource-group $(RESOURCE_GROUP) --name $(PREFIX)vnet --address-prefix 192.168.0.0/16 --subnet-name $(PREFIX)subnet --subnet-prefix 192.168.1.0/24
+	az network vnet create \
+		--resource-group $(RESOURCE_GROUP) \
+		--name $(PREFIX)vnet \
+		--address-prefix 192.168.0.0/16 \
+		--subnet-name $(PREFIX)subnet \
+		--subnet-prefix 192.168.1.0/24
 
 create-public-ip:
-	az network public-ip create --resource-group $(RESOURCE_GROUP) --name $(PREFIX)publicip --dns-name $(PREFIX)
+	az network public-ip create \
+		--resource-group $(RESOURCE_GROUP) \
+		--name $(PREFIX)publicip \
+		--dns-name $(PREFIX)
 
 create-network-security-group:
-	az network nsg create --resource-group $(RESOURCE_GROUP) --name $(NETWORK_SECURITY_GROUP)
+	az network nsg create \
+		--resource-group $(RESOURCE_GROUP) \
+		--name $(NETWORK_SECURITY_GROUP)
 
 create-network-security-group-rule:
 	az network nsg rule create \
@@ -100,7 +115,11 @@ create-vm-azure-image:
 		--custom-data cloud-init.txt
 
 create-vm-managed-image:
-	az vm create --resource-group $(RESOURCE_GROUP) --name $(VIRTUAL_MACHINE) --attach-os-disk $(MANAGED_DISK) --os-type linux
+	az vm create \
+		--resource-group $(RESOURCE_GROUP) \
+		--name $(VIRTUAL_MACHINE) \
+		--attach-os-disk $(MANAGED_DISK) \
+		--os-type linux
 
 create-vm-generalized-image:
 	az vm create \
@@ -117,34 +136,60 @@ create-generalized-image:
 		--source $(VIRTUAL_MACHINE)
 
 create-snapshot:
-	az snapshot create --resource-group $(RESOURCE_GROUP) --location $(LOCATION) --name $(PREFIX)ss --source $(DISK)
+	az snapshot create \
+		--resource-group $(RESOURCE_GROUP) \
+		--location $(LOCATION) \
+		--name $(PREFIX)ss \
+		--source $(DISK)
 
 grant-access-snapshot:
-	@az snapshot grant-access --resource-group $(RESOURCE_GROUP) --name $(PREFIX)ss --duration-in-seconds 3600 --query [accessSas] -o tsv
+	@az snapshot grant-access \
+		--resource-group $(RESOURCE_GROUP) \
+		--name $(PREFIX)ss \
+		--duration-in-seconds 3600 \
+		--query [accessSas] -o tsv
 
 copy-storage-blob:
-	az storage blob copy start --destination-blob $(PREFIX).vhd --account-name $(STORAGE_ACCOUNT) --destination-container $(STORAGE_CONTAINER) --account-key $(KEY) --source-uri "$(SAS)"
+	az storage blob copy start \
+		--destination-blob $(PREFIX).vhd \
+		--account-name $(STORAGE_ACCOUNT) \
+		--destination-container $(STORAGE_CONTAINER) \
+		--account-key $(KEY) \
+		--source-uri "$(SAS)"
 
 upload-vhd:
-	az storage blob upload --account-key $(KEY) --account-name $(STORAGE_ACCOUNT) --container-name $(STORAGE_CONTAINER) --type page --file $$(ls build/azure-manage/*.vhd) --name $(STORAGE_CONTAINER).vhd
+	az storage blob upload \
+		--account-key $(KEY) \
+		--account-name $(STORAGE_ACCOUNT) \
+		--container-name $(STORAGE_CONTAINER) \
+		--type page \
+		--file $$(ls build/azure-manage/*.vhd) \
+		--name $(STORAGE_CONTAINER).vhd
 
 list-groups:
 	az group list
 
 list-resources:
-	az resource list --resource-group $(RESOURCE_GROUP) --location $(LOCATION)
+	az resource list \
+		--resource-group $(RESOURCE_GROUP) \
+		--location $(LOCATION)
 
 list-keys:
-	az storage account keys list --resource-group $(RESOURCE_GROUP) --account-name $(STORAGE_ACCOUNT)
+	az storage account keys list \
+		--resource-group $(RESOURCE_GROUP) \
+		--account-name $(STORAGE_ACCOUNT)
 
 # https://docs.microsoft.com/en-us/cli/azure/disk?view=azure-cli-latest
 list-disks:
 	@#az disk list --resource-group $(RESOURCE_GROUP) --query '[].{Name:name,URI:creationData.sourceUri}' --output table
-	az disk list --resource-group $(RESOURCE_GROUP)
+	az disk list \
+		--resource-group $(RESOURCE_GROUP)
 
 # https://docs.microsoft.com/en-us/azure/virtual-machines/linux/troubleshoot-ssh-connection#use-the-azure-cli-20
 reset-ssh:
-	az vm user reset-ssh --resource-group $(RESOURCE_GROUP) --name $(VIRTUAL_MACHINE)
+	az vm user reset-ssh \
+		--resource-group $(RESOURCE_GROUP) \
+		--name $(VIRTUAL_MACHINE)
 
 reset-ssh-key:
 	az vm user update \
@@ -157,7 +202,9 @@ generate-ssh-keys:
 	ssh-keygen -t rsa -b 4096 -C "azure@$(VIRTUAL_MACHINE)" -f ~/.ssh/azure_id_rsa
 
 deallocate-vm:
-	az vm deallocate --resource-group $(RESOURCE_GROUP) --name $(VIRTUAL_MACHINE)
+	az vm deallocate \
+		--resource-group $(RESOURCE_GROUP) \
+		--name $(VIRTUAL_MACHINE)
 
 generalize-vm:
 	az vm generalize --resource-group $(RESOURCE_GROUP) --name $(VIRTUAL_MACHINE)
