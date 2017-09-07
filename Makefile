@@ -24,8 +24,6 @@ KEY?=setme
 DISK?=setme
 SAS?=setme
 
-.PHONY: create-resource-group create-storage create-vm
-
 build-setup:
 	mkdir -p build
 	cd build && git clone https://github.com/credativ/azure-manage
@@ -42,13 +40,19 @@ create-resource-group:
 	az group create --name $(RESOURCE_GROUP) --location $(LOCATION)
 
 create-storage-account:
-	az storage account create --resource-group $(RESOURCE_GROUP) --location $(LOCATION) --name $(STORAGE_ACCOUNT) --kind Storage --sku Standard_LRS
+	az storage account create --resource-group $(RESOURCE_GROUP) \
+		--location $(LOCATION) \
+		--name $(STORAGE_ACCOUNT) \
+		--kind Storage	\
+		--sku Standard_LRS
 
 create-storage-container:
 	az storage container create --account-name $(STORAGE_ACCOUNT) --name $(STORAGE_CONTAINER)
 
-create-disk:
-	az disk create --resource-group $(RESOURCE_GROUP) --name $(MANAGED_DISK) --source https://$(STORAGE_ACCOUNT).blob.core.windows.net/$(STORAGE_CONTAINER)/$(STORAGE_CONTAINER).vhd
+create-managed-disk:
+	az disk create --resource-group $(RESOURCE_GROUP) \
+	--name $(MANAGED_DISK) \
+	--source https://$(STORAGE_ACCOUNT).blob.core.windows.net/$(STORAGE_CONTAINER)/$(PREFIX).vhd
 
 create-virtual-network:
 	az network vnet create --resource-group $(RESOURCE_GROUP) --name $(PREFIX)vnet --address-prefix 192.168.0.0/16 --subnet-name $(PREFIX)subnet --subnet-prefix 192.168.1.0/24
@@ -143,7 +147,11 @@ reset-ssh:
 	az vm user reset-ssh --resource-group $(RESOURCE_GROUP) --name $(VIRTUAL_MACHINE)
 
 reset-ssh-key:
-	az vm user update --resource-group $(RESOURCE_GROUP) --name $(VIRTUAL_MACHINE) --username azure --ssh-key-value ~/.ssh/azure_id_rsa.pub
+	az vm user update \
+		--resource-group $(RESOURCE_GROUP) \
+		--name $(VIRTUAL_MACHINE) \
+		--username azure \
+		--ssh-key-value ~/.ssh/azure_id_rsa.pub
 
 generate-ssh-keys:
 	ssh-keygen -t rsa -b 4096 -C "azure@$(VIRTUAL_MACHINE)" -f ~/.ssh/azure_id_rsa

@@ -14,7 +14,7 @@ Make a Linux (Ubuntu) based Azure VM!
     - `./make_vhd_from_image.sh <prefix> [location]`
         - `./make_vm_from_vhd.sh <prefix> <new-vm-name> [location]`
     - or
-    - `./make_vm_from_custom_image.sh <prefix> <new prefix> [location]`
+    - `./make_vm_from_custom_image.sh <prefix> <new-prefix> [location]`
         - tbd
 
 # Instructions - advanced
@@ -42,3 +42,4 @@ Work in progress, do not use.
 
 - https://docs.microsoft.com/en-us/azure/virtual-machines/linux/download-vhd
 - https://docs.microsoft.com/en-us/azure/virtual-machines/scripts/virtual-machines-linux-cli-sample-copy-snapshot-to-storage-account
+- https://docs.microsoft.com/en-us/azure/virtual-machines/linux/upload-vhd?toc=%2fazure%2fvirtual-machines%2flinux%2ftoc.json

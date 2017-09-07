@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 # https://docs.microsoft.com/en-us/azure/virtual-machines/scripts/virtual-machines-linux-cli-sample-create-vm-vhd
 
+set -e
+
 if [ -z $1 ];
 then
     echo 'Usage: ./make_vm_from_vhd.sh <prefix> <new-vm-name> [location]'
@@ -20,17 +22,15 @@ else
     LOCATION=$3
 fi
 
-# Create the vm from the vhd
+# Create managed disk from vhd...
+make create-managed-disk PREFIX=${1}
+
+# Create the vm from the managed disk
 az vm create --resource-group ${1}rg \
         --location ${LOCATION} \
         --name ${2} \
-        --image "https://${1}sa.blob.core.windows.net/${1}sc/${1}.vhd" \
-        --use-unmanaged-disk \
-        --storage-account ${1}sa \
-        --storage-container-name ${1}sc \
         --os-type linux \
-        --admin-username azure \
-        --generate-ssh-keys
+        --attach-os-disk ${1}md 
 
 # Update the deploy user with your ssh key
 az vm user update --resource-group ${1}rg \

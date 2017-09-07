@@ -4,8 +4,6 @@
 
 set -e
 
-tmpfile='/tmp/aztmp.txt'
-
 if [ -z $1 ];
 then
     echo 'Usage: ./make_image_from_vm.sh <prefix> [location]'

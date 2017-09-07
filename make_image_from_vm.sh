@@ -17,15 +17,7 @@ else
     LOCATION=$2
 fi
 
-echo 'Open another terminal and complete the following steps before continuing:'
-echo ''
-echo "ssh -i ~/.ssh/azure_id_rsa azure@${1}.eastus.cloudapp.azure.com"
-echo 'sudo waagent -deprovision+user -force'
-echo 'exit'
-echo ''
-echo 'Press [ENTER] to continue...'
-
-read nothing
+ssh -t -oStrictHostKeyChecking=no -i ~/.ssh/azure_id_rsa azure@${1}.${LOCATION}.cloudapp.azure.com "sudo waagent -deprovision+user -force"
 
 make deallocate-vm PREFIX=$1 LOCATION=$LOCATION
 
