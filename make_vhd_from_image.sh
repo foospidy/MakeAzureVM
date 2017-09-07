@@ -30,18 +30,6 @@ make create-storage-container PREFIX=${1}
 echo Getting disk name...
 disk=$(make list-disks PREFIX=${1} | grep ${1}vm_OsDisk | grep '"id"' | cut -d'/' -f 9 | cut -d'"' -f 1)
 
-# get storage account key data to check if storage account exists
-#storage_account_key=$(make list-keys PREFIX=${1})
-
-#if [[ storage_account_key == *"was not found." ]];
-#then
-    # storage account was not found so create it
-#    echo Creating storage account and container...
-#    make create-storage-account PREFIX=${1} LOCATION=${2}
-
-#    make create-storage-container PREFIX=${1}
-#fi
-
 # get storage account key
 echo Getting storage account key...
 key=$(make list-keys PREFIX=${1} | grep -A 2 key1 | grep value | cut -d'"' -f 4)
