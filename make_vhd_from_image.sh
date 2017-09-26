@@ -44,13 +44,13 @@ sas=$(make grant-access-snapshot PREFIX=${1})
 
 # copy the snapshot to storage container
 echo Copying snapshot to storage container...
-make copy-storage-blob PREFIX=${1} KEY=$key SAS="${sas}"
+make storage-blob-copy-start PREFIX=${1} KEY="${key}" SAS="${sas}"
 
 # monitor copy status
 echo Copy status...
 for i in {1..1000}
 do
-    status=`az storage blob show --account-name=${1}sa --container-name ${1}sc --name ${1}.vhd | grep -A 5 copy | grep status | cut -d'"' -f 4`
+    status=`make storage-blob-show PREFIX=${1} | grep -A 5 copy | grep status | cut -d'"' -f 4`
     echo $status
 
     if [[ $status == "success" ]]
@@ -60,3 +60,12 @@ do
 
     sleep 5
 done
+
+echo Generate SAS for VHD...
+sas=$(make storage-blob-generate-sas PREFIX=${1}sc KEY="${key}")
+sas=`echo ${sas} | sed -e 's/\"//'`
+
+echo "Blob: ${1}.vhd"
+echo "URL:  https://${1}sa.blob.core.windows.net/${1}sc/${1}.vhd?${sas}"
+echo "Query String: ?${sas}"
+echo "Done!"

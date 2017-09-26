@@ -149,13 +149,26 @@ grant-access-snapshot:
 		--duration-in-seconds 3600 \
 		--query [accessSas] -o tsv
 
-copy-storage-blob:
+storage-blob-copy-start:
 	az storage blob copy start \
 		--destination-blob $(PREFIX).vhd \
 		--account-name $(STORAGE_ACCOUNT) \
 		--destination-container $(STORAGE_CONTAINER) \
-		--account-key $(KEY) \
+		--account-key "$(KEY)" \
 		--source-uri "$(SAS)"
+
+storage-blob-generate-sas:
+	@az storage blob generate-sas \
+		--container-name $(PREFIX)sc \
+		--name $(PREFIX).vhd \
+		--account-key "$(KEY)" \
+		--account-name $(PREFIX)sa
+
+storage-blob-show:
+	az storage blob show \
+		--account-name=$(PREFIX)sa \
+		--container-name $(PREFIX)sc \
+		--name $(PREFIX).vhd
 
 upload-vhd:
 	az storage blob upload \

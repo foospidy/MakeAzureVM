@@ -26,6 +26,3 @@ make generalize-vm PREFIX=$1 LOCATION=$LOCATION
 make create-generalized-image PREFIX=$1 LOCATION=$LOCATION
 
 echo "Done!"
-echo "You can now run any of the following..."
-echo "    ./make_vhd_from_image.sh ${1} ${LOCATION}"
-echo "    ./make_vm_from_custom_image.sh ${1} <new-prefix> ${LOCATION}"

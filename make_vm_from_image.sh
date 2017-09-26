@@ -5,13 +5,13 @@ set -e
 
 if [ -z $1 ];
 then
-    echo 'Usage: ./make_vm_from_vhd.sh <prefix> <new-prefix> [location]'
+    echo 'Usage: ./make_vm_from_image.sh <prefix> <new-prefix> [location]'
     exit
 fi
 
 if [ -z $2 ];
 then
-    echo 'Usage: ./make_vm_from_vhd.sh <prefix> <new-prefix> [location]'
+    echo 'Usage: ./make_vm_from_image.sh <prefix> <new-prefix> [location]'
     exit
 fi
 
@@ -30,7 +30,7 @@ az vm create \
         --image ${2}image \
         --admin-username azure \
         --generate-ssh-keys \
-        --custom-data cloud-init-config.txt
+        --custom-data cloud-init.txt
 
 if [ ! -f ~/.ssh/azure_id_rsa ];
 then
@@ -40,7 +40,6 @@ fi
 # Update user ssh key
 az vm user update \
         --resource-group ${1}rg \
-        --location ${LOCATION} \
         --name ${2}vm \
         --username azure \
         --ssh-key-value ~/.ssh/azure_id_rsa.pub
