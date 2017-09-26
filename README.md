@@ -7,26 +7,24 @@ Make a Linux (Ubuntu) based Azure VM!
 
 # Instructions - simple
 
+Create VHD to be used for creating new VMs.
+
 1. `./make_vm_from_azure_image.sh <prefix> [location]`
 2. SSH into VM and install/configure (customize to your needs).
 3. `./make_image_from_vm.sh <prefix> [location]`
-4. Either...
-    - `./make_vhd_from_image.sh <prefix> [location]`
-        - `./make_vm_from_vhd.sh <prefix> <new-vm-name> [location]`
-    - or
-    - `./make_vm_from_custom_image.sh <prefix> <new-prefix> [location]`
-        - tbd
-
-# Instructions - advanced
-
-Work in progress, do not use.
-
-1. make build-setup
-2. make build-image  [IMAGE_SIZE=n] [RELEASE=jessie]
+4. `./make_vhd_from_image.sh <prefix> [location]`
+5. `./make_image_from_vhd.sh <prefix> <new-prefix> [location]`
+6. `./make_vm_from_vhd.sh <prefix> <new-prefix> [location]`
 
 # References
 
 ## VM Setup
+- https://docs.microsoft.com/en-us/azure/virtual-machines/linux/capture-image?toc=%2Fazure%2Fvirtual-machines%2Flinux%2Ftoc.json
+- https://docs.microsoft.com/en-us/azure/marketplace-publishing/marketplace-publishing-vm-image-creation
+- https://docs.microsoft.com/en-us/azure/virtual-machines/linux/classic/create-upload-vhdtoc=%2fazure%2fvirtual-machines%2flinux%2fclassic%2ftoc.json
+- https://docs.microsoft.com/en-us/azure/virtual-machines/linux/classic/create-upload-vhd?toc=%2fazure%2fvirtual-machines%2flinux%2fclassic%2ftoc.json
+
+
 - https://github.com/MicrosoftDocs/azure-docs/blob/master/articles/virtual-machines/linux/upload-vhd.md
 - https://docs.microsoft.com/en-us/azure/virtual-machines/linux/create-upload-ubuntu
 - https://docs.microsoft.com/en-us/azure/virtual-machines/linux/debian-create-upload-vhd

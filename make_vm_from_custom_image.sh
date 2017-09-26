@@ -6,13 +6,13 @@ set -e
 
 if [ -z $1 ];
 then
-    echo 'Usage: ./make_vm_from_custom_image.sh <prefix> <new prefix> [location]'
+    echo 'Usage: ./make_vm_from_custom_image.sh <prefix> <new-prefix> [location]'
     exit
 fi
 
 if [ -z $2 ];
 then
-    echo 'Usage: ./make_vm_from_custom_image.sh <prefix> <new prefix> [location]'
+    echo 'Usage: ./make_vm_from_custom_image.sh <prefix> <new-prefix> [location]'
     exit
 fi
 
