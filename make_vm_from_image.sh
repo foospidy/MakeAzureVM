@@ -52,5 +52,4 @@ IP_ADDRESS=$(az vm list-ip-addresses --resource-group ${1}rg --name ${2}vm \
     --query "[0].virtualMachine.network.publicIpAddresses[0].ipAddress" -o tsv)
 
 echo "Done!"
-echo "You can now ssh using: ssh -i ~/.ssh/azure_id_rsa azure@${2}vm.${LOCATION}.cloudapp.azure.com"
 echo "Or, you can ssh using: ssh -i ~/.ssh/azure_id_rsa azure@${IP_ADDRESS}"
