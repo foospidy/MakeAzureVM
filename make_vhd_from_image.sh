@@ -63,7 +63,7 @@ done
 
 echo Generate SAS for VHD...
 sas=$(make storage-blob-generate-sas PREFIX=${1}sc KEY="${key}")
-sas=`echo ${sas} | sed -e 's/\"//'`
+sas=`echo ${sas} | sed -e 's/\"//g'`
 
 echo "Blob: ${1}.vhd"
 echo "URL:  https://${1}sa.blob.core.windows.net/${1}sc/${1}.vhd?${sas}"
