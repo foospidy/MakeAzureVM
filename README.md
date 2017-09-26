@@ -5,7 +5,7 @@ Make a Linux (Ubuntu) based Azure VM!
 
 1. [Install Azure CLI](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli#install-on-debianubuntu-with-apt-get)
 
-# Instructions - simple
+# Instructions
 
 Create VHD to be used for creating new VMs.
 
@@ -13,8 +13,11 @@ Create VHD to be used for creating new VMs.
 2. SSH into VM and install/configure (customize to your needs).
 3. `./make_image_from_vm.sh <prefix> [location]`
 4. `./make_vhd_from_image.sh <prefix> [location]`
-5. `./make_image_from_vhd.sh <prefix> <new-prefix> [location]`
-6. `./make_vm_from_vhd.sh <prefix> <new-prefix> [location]`
+
+Create VM from VHD.
+
+1. `./make_image_from_vhd.sh <prefix> <new-prefix> [location]`
+2. `./make_vm_from_vhd.sh <prefix> <new-prefix> [location]`
 
 # References
 
